@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Learning Tracker{% endblock %}
+
+{% block content %}
+<h1>Learning Dashboard</h1>
+<p class="lead">Visualize your learning progress</p>
+
+<div class="row mt-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title">Time Spent by Topic</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="timeChart" width="400" height="300"></canvas>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title">Progress Toward Goals</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="progressChart" width="400" height="300"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="mt-4">
+    <a href="{{ url_for('main.index') }}" class="btn btn-outline-primary">Back to Home</a>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Time spent chart
+    const timeCtx = document.getElementById('timeChart').getContext('2d');
+    const timeChart = new Chart(timeCtx, {
+        type: 'bar',
+        data: {
+            labels: {{ topic_names|safe }},
+            datasets: [{
+                label: 'Hours Spent',
+                data: {{ time_spent|safe }},
+                backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Hours'
+                    }
+                }
+            }
+        }
+    });
+    
+    // Progress chart
+    const progressCtx = document.getElementById('progressChart').getContext('2d');
+    const progressChart = new Chart(progressCtx, {
+        type: 'radar',
+        data: {
+            labels: {{ topic_names|safe }},
+            datasets: [{
+                label: 'Progress %',
+                data: {{ progress|safe }},
+                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                borderColor: 'rgba(255, 99, 132, 1)',
+                borderWidth: 1,
+                pointBackgroundColor: 'rgba(255, 99, 132, 1)'
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                r: {
+                    min: 0,
+                    max: 100,
+                    ticks: {
+                        stepSize: 20
+                    }
+                }
+            }
+        }
+    });
+</script>
+{% endblock %}
