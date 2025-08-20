@@ -14,7 +14,13 @@
                     <div class="card h-100">
                         <div class="card-body">
                             <h5 class="card-title">{{ topic.name }}</h5>
-                            <p class="card-text">{{ topic.description|default('No description', true) }}</p>
+                            <p class="card-text">
+                                {% if topic.description %}
+                                    {{ topic.description }}
+                                {% else %}
+                                    No description provided
+                                {% endif %}
+                            </p>
                             
                             <div class="progress mb-2">
                                 <div class="progress-bar" role="progressbar" 

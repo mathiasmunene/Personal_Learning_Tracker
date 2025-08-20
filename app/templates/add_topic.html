@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}Add Topic - Learning Tracker{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title mb-0">Add New Learning Topic</h4>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="{{ url_for('main.add_topic') }}">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Topic Name</label>
+                        <input type="text" class="form-control" id="name" name="name" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description</label>
+                        <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="target_hours" class="form-label">Target Hours</label>
+                        <input type="number" class="form-control" id="target_hours" name="target_hours" 
+                               value="10" min="1" step="0.5">
+                    </div>
+                    
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary">Add Topic</button>
+                        <a href="{{ url_for('main.index') }}" class="btn btn-outline-secondary">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
