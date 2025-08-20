@@ -7,6 +7,14 @@ import json
 # Create blueprint for routes
 main_bp = Blueprint('main', __name__)
 
+# Add this route if it's missing
+@main_bp.route('/topic/<int:topic_id>')
+def topic_detail(topic_id):
+    """Show details for a specific topic"""
+    topic = LearningTopic.query.get_or_404(topic_id)
+    today = date.today().isoformat()  # Get today's date in YYYY-MM-DD format
+    return render_template('topic_detail.html', topic=topic, today=today)
+
 @main_bp.route('/')
 def index():
     """Home page with overview of learning progress"""
