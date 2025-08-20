@@ -7,14 +7,6 @@ import json
 # Create blueprint for routes
 main_bp = Blueprint('main', __name__)
 
-# Add this route if it's missing
-@main_bp.route('/topic/<int:topic_id>')
-def topic_detail(topic_id):
-    """Show details for a specific topic"""
-    topic = LearningTopic.query.get_or_404(topic_id)
-    today = date.today().isoformat()  # Get today's date in YYYY-MM-DD format
-    return render_template('topic_detail.html', topic=topic, today=today)
-
 @main_bp.route('/')
 def index():
     """Home page with overview of learning progress"""
@@ -71,7 +63,8 @@ def add_topic():
 def topic_detail(topic_id):
     """Show details for a specific topic"""
     topic = LearningTopic.query.get_or_404(topic_id)
-    return render_template('topic_detail.html', topic=topic)
+    today = date.today().isoformat()
+    return render_template('topic_detail.html', topic=topic, today=today)
 
 @main_bp.route('/session/add', methods=['POST'])
 def add_session():
@@ -79,11 +72,13 @@ def add_session():
     topic_id = request.form.get('topic_id')
     duration = float(request.form.get('duration'))
     notes = request.form.get('notes')
-    session_date = request.form.get('date') or date.today()
+    session_date = request.form.get('date')
     
     # Convert string date to date object if needed
-    if isinstance(session_date, str):
+    if session_date:
         session_date = datetime.strptime(session_date, '%Y-%m-%d').date()
+    else:
+        session_date = date.today()
     
     # Create new session
     new_session = LearningSession(
